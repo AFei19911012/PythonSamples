@@ -3,6 +3,28 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+
+# User-specific files
+.idea/
+keras_yolo4/
+*.weights
+*.mp4
+*.avi
+*.dll
+*.lib
+*.dat
+*.whl
+*.log
+*.json
+*.exe
+*.zip
+*.pth
+*.pdparams
+*.pt
+*.npz
+*.h5
+*.npz
+
 # C extensions
 *.so
 

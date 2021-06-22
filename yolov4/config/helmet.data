@@ -1,0 +1,7 @@
+classes= 2
+train  = data/helmet_train.txt   # train
+valid  = data/helmet_val.txt     # val
+names = ../config/helmet.names   # classes
+backup = backup/                 # weights
+eval=coco
+
