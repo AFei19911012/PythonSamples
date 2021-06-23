@@ -11,10 +11,13 @@
 # =======================================================
 import cv2
 import torch
+import os
 
 from deep_sort.deep_sort import DeepSort
 from deep_sort.utils.parser import get_config
 from detector import YOLOv5Detector
+
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 
 
 def draw_image(image, bbox_container, obj_ids):
@@ -65,8 +68,8 @@ def cut_bbox_container(bbox_container):
 
 
 def main():
-    video_name = 'car.mp4'
-    # video_name = 'ADL-Rundle-6-raw.webm'
+    # video_name = 'car.mp4'
+    video_name = 'ADL-Rundle-6-raw.webm'
     cap = cv2.VideoCapture(f'data/videos/{video_name}')
     fource = cv2.VideoWriter_fourcc(*'mp4v')
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
