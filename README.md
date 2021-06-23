@@ -56,11 +56,11 @@ Python basic knowledge and examples
 > - ex_try
 > - ex_sort_index
 > - ex_queue_thread
+> - ex_hashlib: hash 码
+> - ex_private_variable: 私有变量
 
 ## demo
 > - ex_demo
-> - ex_hashlib: hash 码
-> - ex_private_variable: 私有变量
 > - ex_ftp: ftp 服务器
 > - ex_camera_rtsp: rtsp 方式获取摄像头视频流
 > - ex_camera_dahua_sdk: 大华 sdk 方式获取车牌
