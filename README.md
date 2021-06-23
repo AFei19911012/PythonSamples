@@ -30,6 +30,13 @@ fast-reid: models
 链接：https://pan.baidu.com/s/1dxiLkSJBHrOv-jAFCF75og 
 提取码：xa9z 
 复制这段内容后打开百度网盘手机App，操作更方便哦--来自百度网盘超级会员V4的分享
+
+deep-sort: weights
+链接：https://pan.baidu.com/s/1kKrjHUJnjYXHuglFrscDAg 
+提取码：2mzr 
+复制这段内容后打开百度网盘手机App，操作更方便哦--来自百度网盘超级会员V4的分享
+
+
 ```
 
 # beginner learn python examples
@@ -106,12 +113,13 @@ Python basic knowledge and examples
 > 图像检测
 > - yolov4_darknet_dll
 > - yolov4-opencv
-> - demo_image2image：视频保存成图片
-> - demo_voc_label：YOLOv4 训练集图片文件名格式文本生成
+> - demo_image2image: 视频保存成图片
+> - demo_voc_label: YOLOv4 训练集图片文件名格式文本生成
 
 
 # yolov5
 > 图像检测
 > - detector: 图像检测器
+> - yolov5_tracker: 人、车实时追踪
 
 
