@@ -24,6 +24,7 @@ keras_yolo4/
 *.npz
 *.h5
 *.npz
+*.webm
 
 # C extensions
 *.so

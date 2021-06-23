@@ -5,7 +5,7 @@
  Author     : Taosy.W
  Zhihu      : https://www.zhihu.com/people/1105936347
  Github     : https://github.com/AFei19911012
- Description:
+ Description: 图像目标检测，参考源码: https://github.com/ultralytics/yolov5.git
 """
 
 # =======================================================
@@ -38,8 +38,6 @@ class YOLOv5Detector:
         """ half precision only supported on CUDA """
         if self.half_precision:
             self.model.half()
-        """ b-box """
-        self.bbox_container = []
 
     def image_preprocess(self, image):
         img0 = image.copy()
@@ -67,6 +65,7 @@ class YOLOv5Detector:
         """ Process detections """
         im0 = image.copy()
         s = ''
+        bbox_container = []
         if len(det):
             """ Rescale boxes from img_size to im0 size """
             det[:, :4] = scale_coords(img.shape[2:], det[:, :4], im0.shape).round()
@@ -83,9 +82,9 @@ class YOLOv5Detector:
                 """ xyxy: LU --> RD """
                 plot_one_box(xyxy, im0, label=label, color=colors(c, True), line_thickness=2)
                 bbox = {'class': self.names[c], 'confidence': round(conf.item(), 2), 'box': [int(v.item()) for v in xyxy]}
-                self.bbox_container.append(bbox)
+                bbox_container.append(bbox)
         print(s)
-        return im0
+        return im0, bbox_container
 
 
 def detect_demo():
@@ -100,19 +99,19 @@ def detect_demo():
         cap = cv2.VideoCapture(image_path)
     else:
         cap = cv2.VideoCapture(video_path)
-        fource = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-        width = round(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        height = round(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        fource = cv2.VideoWriter_fourcc(*'mp4v')
+        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         vid_writer = cv2.VideoWriter(video_save_path, fource, 30, (width, height))
     """ 图像检测器 """
-    yolov4_detector = YOLOv5Detector()
+    yolov5_detector = YOLOv5Detector()
     window_name = 'YOLOv5 detector'
     while True:
         state, frame = cap.read()
         if not state:
             break
-        image_result = yolov4_detector(frame)
-        for info in yolov4_detector.bbox_container:
+        image_result, bbox_container = yolov5_detector(frame)
+        for info in bbox_container:
             print(info)
         print('---')
         """ 显示图像 """
