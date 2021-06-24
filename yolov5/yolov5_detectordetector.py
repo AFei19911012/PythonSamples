@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
  Created on 2021/6/22 8:57
- Filename   : detector.py
+ Filename   : yolov5_detector.py
  Author     : Taosy.W
  Zhihu      : https://www.zhihu.com/people/1105936347
  Github     : https://github.com/AFei19911012
