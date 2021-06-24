@@ -1,13 +1,14 @@
 # -*- encoding: utf-8 -*-
 """
-@Author : ff_wang
-@Time   : 2021/4/14 上午11:27
-@Contact: wangfeifei@phantomtiger.com
+ Created on 2021/4/14 11:27
+ Filename   : yolov5_tracker.py
+ Author     : Taosy.W
+ Zhihu      : https://www.zhihu.com/people/1105936347
+ Github     : https://github.com/AFei19911012
+ Description: 判断叉车+货物出入库
 """
 
 import os
-
-import cv2
 import numpy as np
 import darknet
 import random

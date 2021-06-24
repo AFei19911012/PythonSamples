@@ -13,7 +13,8 @@ import time
 import os
 import sys
 
-if __name__ == '__main__':
+
+def main():
     # file path
     video_name = 'helmet.mp4'
     video_path = 'videos/' + video_name
@@ -35,8 +36,12 @@ if __name__ == '__main__':
         has_frame, frame = cap.read()
         if has_frame and idx % 5 == 1:
             # file_name = f'{idx//5}'.zfill(6) + '.jpg'
-            file_name = f'{idx//5:06d}.jpg'
+            file_name = f'{idx // 5:06d}.jpg'
             cv.imwrite(os.path.join(image_path, file_name), frame)
         idx += 1
     cap.release()
     print('Done processing.')
+
+
+if __name__ == '__main__':
+    main()

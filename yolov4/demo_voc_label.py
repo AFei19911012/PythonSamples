@@ -10,7 +10,8 @@
 
 import os
 
-if __name__ == '__main__':
+
+def main():
     wd = os.getcwd()
     # Get train and val
     file_list = os.listdir('data/helmet_2021_04_11')
@@ -23,3 +24,7 @@ if __name__ == '__main__':
     for image_id in train_list:
         list_file.write(f'{wd}/data/helmet_2021_04_11/{image_id}.jpg\n')
     list_file.close()
+
+
+if __name__ == '__main__':
+    main()

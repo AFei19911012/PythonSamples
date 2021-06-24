@@ -1,11 +1,11 @@
 # -*- encoding: utf-8 -*-
 """
  Created on 2021/4/14 21:27
- Author     : Taosy
- E-mail     : 1105936347@qq.com
+ Filename   : yolov5_tracker.py
+ Author     : Taosy.W
  Zhihu      : https://www.zhihu.com/people/1105936347
  Github     : https://github.com/AFei19911012
- Description: YOLO-OpenCV
+ Description: yolov4-opencv 目标检测
 """
 
 import cv2
