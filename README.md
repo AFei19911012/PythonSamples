@@ -119,7 +119,7 @@ Python basic knowledge and examples
 
 # yolov5
 > 图像检测
-> - detector: 图像检测器
+> - yolov5_detector: 图像检测器
 > - yolov5_tracker: 人、车实时追踪
 
 

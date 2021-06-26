@@ -15,7 +15,7 @@ import os
 
 from deep_sort.deep_sort import DeepSort
 from deep_sort.utils.parser import get_config
-from detector import YOLOv5Detector
+from yolov5_detector import YOLOv5Detector
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 
