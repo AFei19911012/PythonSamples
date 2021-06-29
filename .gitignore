@@ -6,7 +6,6 @@ __pycache__/
 
 # User-specific files
 .idea/
-keras_yolo4/
 *.weights
 *.mp4
 *.avi
