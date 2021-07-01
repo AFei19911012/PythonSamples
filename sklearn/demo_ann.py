@@ -33,7 +33,6 @@ def breast_cancer_ann():
     y = df.diagnosis
 
     """ 分类数据转换为二进制格式 """
-
     lb = LabelEncoder()
     y = lb.fit_transform(y)
 
