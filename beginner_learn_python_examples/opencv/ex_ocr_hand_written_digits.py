@@ -31,11 +31,11 @@ def hog(img):
     gx = cv.Sobel(img, cv.CV_32F, 1, 0)
     gy = cv.Sobel(img, cv.CV_32F, 0, 1)
     mag, ang = cv.cartToPolar(gx, gy)
-    bins = np.int32(bin_n * ang / (2 * np.pi))  # quantizing binvalues in (0...16)
+    bins = np.int32(bin_n * ang / (2 * np.pi))
     bin_cells = bins[:10, :10], bins[10:, :10], bins[:10, 10:], bins[10:, 10:]
     mag_cells = mag[:10, :10], mag[10:, :10], mag[:10, 10:], mag[10:, 10:]
     hists = [np.bincount(b.ravel(), m.ravel(), bin_n) for b, m in zip(bin_cells, mag_cells)]
-    hist = np.hstack(hists)  # hist is a 64 bit vector
+    hist = np.hstack(hists)
     return hist
 
 
@@ -45,7 +45,7 @@ def main():
         raise Exception("we need the digits.png image from samples/data here !")
 
     cells = [np.hsplit(row, 100) for row in np.vsplit(img, 50)]
-    # First half is trainData, remaining is testData
+    """ 一半训练、一半验证 """
     train_cells = [i[:50] for i in cells]
     test_cells = [i[50:] for i in cells]
     deskewed = [list(map(deskew, row)) for row in train_cells]
