@@ -186,19 +186,21 @@ def joy_plot():
     fig, axes = joypy.joyplot(mpg, column=['hwy', 'cty'], by="class", ylim='own', figsize=(14, 10))
 
     # Decoration
-    plt.title('Joy Plot of City and Highway Mileage by Class', fontsize=22)
+    plt.title('Joy Plot of City and Highway Mileage by Class', fontsize=22, pad=-10)
     plt.show()
 
 
 def density_curves_with_histogram():
     df = pd.read_csv("data/mpg_ggplot2.csv")
     plt.figure(figsize=(13, 10), dpi=80)
-    sns.distplot(df.loc[df['class'] == 'compact', "cty"], color="dodgerblue", label="Compact", hist_kws={'alpha': .7}, kde_kws={'linewidth': 3})
-    sns.distplot(df.loc[df['class'] == 'suv', "cty"], color="orange", label="SUV", hist_kws={'alpha': .7}, kde_kws={'linewidth': 3})
-    sns.distplot(df.loc[df['class'] == 'minivan', "cty"], color="g", label="minivan", hist_kws={'alpha': .7}, kde_kws={'linewidth': 3})
-    plt.ylim(0, 0.35)
-    plt.title('Density Plot of City Mileage by Vehicle Type', fontsize=22)
-    plt.legend()
+    """ 手绘样式 """
+    with plt.xkcd():
+        sns.distplot(df.loc[df['class'] == 'compact', "cty"], color="dodgerblue", label="Compact", hist_kws={'alpha': .7}, kde_kws={'linewidth': 3})
+        sns.distplot(df.loc[df['class'] == 'suv', "cty"], color="orange", label="SUV", hist_kws={'alpha': .7}, kde_kws={'linewidth': 3})
+        sns.distplot(df.loc[df['class'] == 'minivan', "cty"], color="g", label="minivan", hist_kws={'alpha': .7}, kde_kws={'linewidth': 3})
+        plt.ylim(0, 0.35)
+        plt.title('Density Plot of City Mileage by Vehicle Type', fontsize=22)
+        plt.legend()
     plt.show()
 
 
