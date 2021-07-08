@@ -48,26 +48,26 @@ def draw_box(image, detections, colors):
 
 if __name__ == '__main__':
     # Initialization
-    names_path = '../config/coco.names'
-    cfg_path = '../config/coco.cfg'
-    data_path = '../config/coco.data'
-    weights_path = '../weights/yolov4.weights'
+    names_path = '../config/helmet.names'
+    cfg_path = '../config/helmet.cfg'
+    data_path = '../config/helmet.data'
+    weights_path = '../weights/helmet.weights'
     image_path = '../images/xiyou.jpg'
-    video_path = '../videos/run.mp4'
-    video_save = '../videos/run.avi'
+    video_path = '../videos/helmet.mp4'
+    video_save = '../videos/helmet.avi'
     threshold = 0.5
     # Initialize yolov4 network
     network, classes, class_colors = darknet.load_network(cfg_path, data_path, weights_path, 1)
     colors = get_colors(classes)
     winName = 'Deep learning object detection in YOLO'
-    # image_path = ''
+    image_path = ''
     if image_path:
         cap = cv.VideoCapture(image_path)
     else:
         cap = cv.VideoCapture(video_path)
-        # vid_writer = cv.VideoWriter(video_save, cv.VideoWriter_fourcc('M', 'J', 'P', 'G'), 30,
-        #                             (round(cap.get(cv.CAP_PROP_FRAME_WIDTH)),
-        #                              round(cap.get(cv.CAP_PROP_FRAME_HEIGHT))))
+        vid_writer = cv.VideoWriter(video_save, cv.VideoWriter_fourcc('M', 'J', 'P', 'G'), 30,
+                                    (round(cap.get(cv.CAP_PROP_FRAME_WIDTH)),
+                                     round(cap.get(cv.CAP_PROP_FRAME_HEIGHT))))
     state = True
     while state:
         state, frame = cap.read()
@@ -81,6 +81,6 @@ if __name__ == '__main__':
         else:
             cv.waitKey(1)
         # Save
-        # if not image_path:
-        #     vid_writer.write(frame.astype(np.uint8))
+        if not image_path:
+            vid_writer.write(frame.astype(np.uint8))
     cap.release()
