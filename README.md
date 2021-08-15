@@ -1,16 +1,17 @@
 # PythonSamples
 ```
+Python samples for learning
+
 Blog:   https://www.zhihu.com/people/1105936347
 Github: https://github.com/AFei19911012/PythonSamples
-
-各种 Python 学习案例
-仅供个人学习参考
 
 权重、数据集下载链接
 链接：https://pan.baidu.com/s/1wd3uhwYzw73-_LYgwKTgog 
 提取码：00iw 
 --来自百度网盘超级会员V4的分享
 ```
+
+------
 
 # beginner learn python examples
 Python 基础学习记录
