@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-
+"""
+ Created on 2021/8/13 8:57
+ Filename   : yolov5_detector.py
+ Author     : Taosy.W
+ Zhihu      : https://www.zhihu.com/people/1105936347
+ Github     : https://github.com/AFei19911012
+ Description: 图像目标检测，参考源码: https://github.com/ultralytics/yolov5.git
+"""
 
+# =======================================================
 import cv2
 import numpy as np
 import torch
@@ -129,7 +138,7 @@ def main():
                 bbox_draw.append({'class': label, 'box': [x1, y1, x2, y2]})
                 obj_ids.append(track_id)
                 # 正常路径
-                if track_id == 9:
+                if track_id == 11:
                     if not path_normal_walker:
                         path_normal_walker.append((0.5 * (x1 + x2), 0.5 * (y1 + y2)))
                     else:
