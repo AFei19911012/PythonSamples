@@ -88,13 +88,13 @@ class YOLOv5Detector:
 
 
 def detect_demo():
-    image_name = 'bus.jpg'
+    image_name = 'viya.jpg'
     image_path = f'data/images/{image_name}'
     image_save_path = f'runs/detect/exp/{image_name}'
     video_name = 'run.mp4'
     video_path = f'data/videos/{video_name}'
     video_save_path = f'runs/detect/exp/{video_name}'
-    image_path = ''
+    # image_path = ''
     if image_path:
         cap = cv2.VideoCapture(image_path)
     else:
@@ -104,7 +104,7 @@ def detect_demo():
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         vid_writer = cv2.VideoWriter(video_save_path, fource, 30, (width, height))
     """ 图像检测器 """
-    yolov5_detector = YOLOv5Detector()
+    yolov5_detector = YOLOv5Detector(weights='weights/best.pt', conf_thres=0.01)
     window_name = 'YOLOv5 detector'
     while True:
         state, frame = cap.read()

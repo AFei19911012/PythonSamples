@@ -9,6 +9,8 @@
 """
 
 # =======================================================
+import json
+
 import cv2
 import numpy as np
 import torch
@@ -22,24 +24,56 @@ from yolov5_detector import YOLOv5Detector
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 
 # 定义一些变量
-threshold_distance = 300
-path_normal_walker = []
+threshold_distance = 200
+threshold_v = [0, 10]
+threshold_v_mean = [0, 5]
+# path_normal_walker = []
+# path_normal_walker_2 = []
+current_vs = []
 path_walkers = []
 
 
-def cal_distance(track_id):
+def cal_distance(track_id, normal_paths):
     """ 计算距离 """
-    dist = 0
+    # dist = 0
+    # if len(path_walkers) >= track_id:
+    #     length = min(len(path_normal_walker), len(path_walkers[track_id - 1]))
+    #     for i in range(0, length):
+    #         x_len = (path_walkers[track_id-1][i][0] - path_normal_walker[i][0]) * (path_walkers[track_id-1][i][0] - path_normal_walker[i][0])
+    #         y_len = (path_walkers[track_id-1][i][1] - path_normal_walker[i][1]) * (path_walkers[track_id-1][i][1] - path_normal_walker[i][1])
+    #         dist = dist + math.sqrt(x_len + y_len) / length
+
     if len(path_walkers) >= track_id:
-        length = min(len(path_normal_walker), len(path_walkers[track_id - 1]))
-        for i in range(0, length):
-            x_len = (path_walkers[track_id-1][i][0] - path_normal_walker[i][0]) * (path_walkers[track_id-1][i][0] - path_normal_walker[i][0])
-            y_len = (path_walkers[track_id-1][i][1] - path_normal_walker[i][1]) * (path_walkers[track_id-1][i][1] - path_normal_walker[i][1])
-            dist = dist + math.sqrt(x_len + y_len) / length
-    return dist
+        dists = []
+        for normal_path_number in normal_paths:
+            dist = 0
+            normal_path = normal_paths[normal_path_number]
+            length = min(len(normal_path), len(path_walkers[track_id - 1]))
+            for i in range(0, length):
+                x_len = (path_walkers[track_id - 1][i][0] - normal_path[i][0]) * (path_walkers[track_id - 1][i][0] - normal_path[i][0])
+                y_len = (path_walkers[track_id - 1][i][1] - normal_path[i][1]) * (path_walkers[track_id - 1][i][1] - normal_path[i][1])
+                dist = dist + math.sqrt(x_len + y_len) / length
+            dists.append(dist)
+    return min(dists)
 
 
-def draw_image(image, bbox_container, obj_ids):
+def condition_2_3(track_id):
+    is_abnormal = False
+    if len(current_vs) >= track_id and current_vs[track_id - 1]:
+        # 条件 2
+        dist = current_vs[track_id - 1][-1]
+        if dist < threshold_v[0] or dist > threshold_v[1]:
+            is_abnormal = True
+
+        # 条件 3
+        dist = math.fsum(current_vs[track_id - 1]) / len(current_vs[track_id - 1])
+        if dist < threshold_v_mean[0] or dist > threshold_v_mean[1]:
+            is_abnormal = True
+
+    return is_abnormal
+
+
+def draw_image(image, bbox_container, obj_ids, normal_paths):
     """ 绘制人标签 """
     """ 线宽 """
     tl = 2 or round(0.002 * (image.shape[0] + image.shape[1]) / 2) + 1
@@ -47,23 +81,26 @@ def draw_image(image, bbox_container, obj_ids):
         label = bbox['class']
         x1, y1, x2, y2 = bbox['box']
         c1, c2 = (x1, y1), (x2, y2)
-        cv2.rectangle(image, c1, c2, (255, 0, 0), thickness=tl, lineType=cv2.LINE_AA)
         """ 字体宽度 """
         tf = max(tl - 1, 1)
         label_show = f'{label}-{obj_ids[i]}'
         """ 判断是否异常行为 """
-        distance = cal_distance(obj_ids[i])
-        if distance > threshold_distance:
+        distance = cal_distance(obj_ids[i], normal_paths)
+        color = (255, 0, 0)
+        if distance > threshold_distance or condition_2_3(obj_ids[i]):
             label_show = label_show + '-NG '
+            color = (0, 0, 255)
         t_size = cv2.getTextSize(label_show, 0, fontScale=tl / 3, thickness=tf)[0]
         c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
+        cv2.rectangle(image, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
         """ filled """
-        cv2.rectangle(image, c1, c2, (255, 0, 0), cv2.FILLED, cv2.LINE_AA)
+        cv2.rectangle(image, c1, c2, color, cv2.FILLED, cv2.LINE_AA)
         cv2.putText(image, label_show, (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
-    """ 画路径 """
-    if path_normal_walker:
-        pts = np.array(path_normal_walker, np.int32)
-        cv2.polylines(image, [pts], False, (0, 0, 255), 3)
+    """ 画参考路径 """
+    for normal_path_number in normal_paths:
+        normal_path = normal_paths[normal_path_number]
+        pts = np.array(normal_path, np.int32)
+        cv2.polylines(image, [pts], False, (0, 255, 0), 3)
 
 
 def xyxy_to_xywh(box):
@@ -110,6 +147,10 @@ def main():
                         nn_budget=cfg.DEEPSORT.NN_BUDGET,
                         use_cuda=True)
 
+    # 读取正常路径
+    with open('normal_path.json', 'r') as f:
+        normal_paths = json.load(f)
+
     window_name = 'Abnormal walker detection'
     while True:
         state, frame = cap.read()
@@ -138,18 +179,31 @@ def main():
                 bbox_draw.append({'class': label, 'box': [x1, y1, x2, y2]})
                 obj_ids.append(track_id)
                 # 正常路径
-                if track_id == 11:
-                    if not path_normal_walker:
-                        path_normal_walker.append((0.5 * (x1 + x2), 0.5 * (y1 + y2)))
-                    else:
-                        if 0.5 * (y1 + y2) < path_normal_walker[-1][1]:
-                            path_normal_walker.append((0.5 * (x1 + x2), 0.5 * (y1 + y2)))
+                # if track_id == 11:
+                #     if not path_normal_walker:
+                #         path_normal_walker.append((0.5 * (x1 + x2), 0.5 * (y1 + y2)))
+                #     else:
+                #         if 0.5 * (y1 + y2) < path_normal_walker[-1][1]:
+                #             path_normal_walker.append((0.5 * (x1 + x2), 0.5 * (y1 + y2)))
+                # if track_id == 51:
+                #     if not path_normal_walker_2:
+                #         path_normal_walker_2.append((0.5 * (x1 + x2), 0.5 * (y1 + y2)))
+                #     else:
+                #         if 0.5 * (y1 + y2) < path_normal_walker_2[-1][1]:
+                #             path_normal_walker_2.append((0.5 * (x1 + x2), 0.5 * (y1 + y2)))
                 # 其它路径
                 while track_id > len(path_walkers):
                     path_walkers.append([])
+                    current_vs.append([])
                 path_walkers[track_id - 1].append((0.5 * (x1 + x2), 0.5 * (y1 + y2)))
+                if len(path_walkers[track_id - 1]) > 1:
+                    x = (path_walkers[track_id - 1][-1][0] - path_walkers[track_id - 1][-2][0]) * \
+                        (path_walkers[track_id - 1][-1][0] - path_walkers[track_id - 1][-2][0])
+                    y = (path_walkers[track_id - 1][-1][1] - path_walkers[track_id - 1][-2][1]) * \
+                        (path_walkers[track_id - 1][-1][1] - path_walkers[track_id - 1][-2][1])
+                    current_vs[track_id - 1].append(math.sqrt(x + y))
             """ 绘图显示 """
-            draw_image(frame, bbox_draw, obj_ids)
+            draw_image(frame, bbox_draw, obj_ids, normal_paths)
         """ 输出一些信息 """
         for info in bbox_draw:
             print(info)
@@ -164,6 +218,11 @@ def main():
     cap.release()
     vid_writer.release()
     cv2.destroyAllWindows()
+
+    # dict_path = {'path_01': path_normal_walker, 'path_02': path_normal_walker_2}
+    # 写入 JSON 数据
+    # with open('normal_path.json', 'w') as f:
+    #     json.dump(dict_path, f)
 
 
 if __name__ == "__main__":
