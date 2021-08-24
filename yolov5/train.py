@@ -469,8 +469,8 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
 def parse_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', type=str, default='weights/yolov5s.pt', help='initial weights path')
-    parser.add_argument('--cfg', type=str, default='models/yolov5s.yaml', help='model.yaml path')
-    parser.add_argument('--data', type=str, default='data/coco128.yaml', help='dataset.yaml path')
+    parser.add_argument('--cfg', type=str, default='models/my_yolo.yaml', help='model.yaml path')
+    parser.add_argument('--data', type=str, default='data/my_yolo.yaml', help='dataset.yaml path')
     parser.add_argument('--hyp', type=str, default='data/hyp.scratch.yaml', help='hyperparameters path')
     parser.add_argument('--epochs', type=int, default=300)
     parser.add_argument('--batch-size', type=int, default=16, help='total batch size for all GPUs')

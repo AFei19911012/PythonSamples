@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 """
- Created on 2021/6/22 8:57
- Filename   : yolov5_detector.py
+ Created on 2021/8/24 22:26
+ Filename   : capure_screen_detector.py
  Author     : Taosy.W
  Zhihu      : https://www.zhihu.com/people/1105936347
  Github     : https://github.com/AFei19911012
- Description: 图像目标检测，参考源码: https://github.com/ultralytics/yolov5.git
+ Description:
 """
 
 # =======================================================
+
 import cv2
+import imutils
 import numpy as np
 import torch
 
@@ -17,7 +19,7 @@ from models.experimental import attempt_load
 from utils.datasets import letterbox
 from utils.general import check_img_size, non_max_suppression, scale_coords
 from utils.plots import colors, plot_one_box
-from PIL import Image, ImageGrab
+from PIL import ImageGrab
 
 
 class YOLOv5Detector:
@@ -89,46 +91,22 @@ class YOLOv5Detector:
 
 
 def detect_demo():
-    image_name = 'viya.jpg'
-    image_path = f'data/images/{image_name}'
-    image_save_path = f'runs/detect/exp/{image_name}'
-    video_name = 'run.mp4'
-    video_path = f'data/videos/{video_name}'
-    video_save_path = f'runs/detect/exp/{video_name}'
-    # image_path = ''
-    if image_path:
-        cap = cv2.VideoCapture(image_path)
-    else:
-        cap = cv2.VideoCapture(video_path)
-        fource = cv2.VideoWriter_fourcc(*'mp4v')
-        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        vid_writer = cv2.VideoWriter(video_save_path, fource, 30, (width, height))
     """ 图像检测器 """
-    yolov5_detector = YOLOv5Detector(weights='weights/best.pt', conf_thres=0.05)
+    yolov5_detector = YOLOv5Detector(weights='weights/yolov5s.pt', conf_thres=0.25)
     window_name = 'YOLOv5 detector'
     while True:
-        state, frame = cap.read()
-        if not state:
-            break
+        im = ImageGrab.grab(bbox=(0, 0, 600, 800))
+        frame = np.array(im)
         image_result, bbox_container = yolov5_detector(frame)
         for info in bbox_container:
             print(info)
         print('---')
         """ 显示图像 """
-        cv2.imshow(window_name, image_result)
-        if image_path:
-            cv2.imwrite(image_save_path, image_result)
-            cv2.waitKey(1000)
-        else:
-            vid_writer.write(image_result)
-            cv2.waitKey(1)
+        cv2.imshow(window_name, imutils.opencv2matplotlib(image_result))
+        cv2.waitKey(1)
         """ 点 x 退出 """
         if cv2.getWindowProperty(window_name, cv2.WND_PROP_AUTOSIZE) < 1:
             break
-    cap.release()
-    if not image_path:
-        vid_writer.release()
     cv2.destroyAllWindows()
 
 

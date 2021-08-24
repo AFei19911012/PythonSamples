@@ -90,9 +90,9 @@ def draw_image(image, bbox_container, obj_ids, normal_paths):
         if distance > threshold_distance or condition_2_3(obj_ids[i]):
             label_show = label_show + '-NG '
             color = (0, 0, 255)
+        cv2.rectangle(image, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
         t_size = cv2.getTextSize(label_show, 0, fontScale=tl / 3, thickness=tf)[0]
         c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
-        cv2.rectangle(image, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
         """ filled """
         cv2.rectangle(image, c1, c2, color, cv2.FILLED, cv2.LINE_AA)
         cv2.putText(image, label_show, (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
@@ -218,6 +218,16 @@ def main():
     cap.release()
     vid_writer.release()
     cv2.destroyAllWindows()
+
+    # 把轨迹保存成图片
+    if not os.path.exists('track_id'):
+        os.makedirs('track_id')
+    for i in range(0, len(path_walkers)):
+        track = path_walkers[i]
+        pts = np.array(track, np.int32)
+        empty_image = 255 * np.ones((height, width, 3), np.uint8)
+        cv2.polylines(empty_image, [pts], False, (0, 255, 0), 3)
+        cv2.imwrite(f'track_id/{i + 1}.jpg', empty_image)
 
     # dict_path = {'path_01': path_normal_walker, 'path_02': path_normal_walker_2}
     # 写入 JSON 数据
