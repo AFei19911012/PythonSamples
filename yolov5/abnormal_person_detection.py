@@ -24,25 +24,15 @@ from yolov5_detector import YOLOv5Detector
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 
 # 定义一些变量
-threshold_distance = 200
-threshold_v = [0, 10]
-threshold_v_mean = [0, 5]
-# path_normal_walker = []
-# path_normal_walker_2 = []
+threshold_distance = 10000
+threshold_v = [2, 20]
+threshold_v_mean = [2, 20]
 current_vs = []
 path_walkers = []
 
 
 def cal_distance(track_id, normal_paths):
     """ 计算距离 """
-    # dist = 0
-    # if len(path_walkers) >= track_id:
-    #     length = min(len(path_normal_walker), len(path_walkers[track_id - 1]))
-    #     for i in range(0, length):
-    #         x_len = (path_walkers[track_id-1][i][0] - path_normal_walker[i][0]) * (path_walkers[track_id-1][i][0] - path_normal_walker[i][0])
-    #         y_len = (path_walkers[track_id-1][i][1] - path_normal_walker[i][1]) * (path_walkers[track_id-1][i][1] - path_normal_walker[i][1])
-    #         dist = dist + math.sqrt(x_len + y_len) / length
-
     if len(path_walkers) >= track_id:
         dists = []
         for normal_path_number in normal_paths:
@@ -52,24 +42,37 @@ def cal_distance(track_id, normal_paths):
             for i in range(0, length):
                 x_len = (path_walkers[track_id - 1][i][0] - normal_path[i][0]) * (path_walkers[track_id - 1][i][0] - normal_path[i][0])
                 y_len = (path_walkers[track_id - 1][i][1] - normal_path[i][1]) * (path_walkers[track_id - 1][i][1] - normal_path[i][1])
-                dist = dist + math.sqrt(x_len + y_len) / length
+                dist = dist + math.sqrt(x_len + y_len)
             dists.append(dist)
     return min(dists)
 
 
-def condition_2_3(track_id):
+def condition_1(track_id, normal_paths):
+    # 条件 1
+    distance = cal_distance(track_id, normal_paths)
+    is_abnormal = False
+    if distance > threshold_distance:
+        is_abnormal = True
+    return is_abnormal
+
+
+def condition_2(track_id):
+    # 条件 2
     is_abnormal = False
     if len(current_vs) >= track_id and current_vs[track_id - 1]:
-        # 条件 2
         dist = current_vs[track_id - 1][-1]
         if dist < threshold_v[0] or dist > threshold_v[1]:
             is_abnormal = True
+    return is_abnormal
 
-        # 条件 3
+
+def condition_3(track_id):
+    # 条件 3
+    is_abnormal = False
+    if len(current_vs) >= track_id and current_vs[track_id - 1]:
         dist = math.fsum(current_vs[track_id - 1]) / len(current_vs[track_id - 1])
         if dist < threshold_v_mean[0] or dist > threshold_v_mean[1]:
             is_abnormal = True
-
     return is_abnormal
 
 
@@ -83,13 +86,22 @@ def draw_image(image, bbox_container, obj_ids, normal_paths):
         c1, c2 = (x1, y1), (x2, y2)
         """ 字体宽度 """
         tf = max(tl - 1, 1)
-        label_show = f'{label}-{obj_ids[i]}'
+        label_show = f'{obj_ids[i]}'
         """ 判断是否异常行为 """
-        distance = cal_distance(obj_ids[i], normal_paths)
+        # distance = cal_distance(obj_ids[i], normal_paths)
         color = (255, 0, 0)
-        if distance > threshold_distance or condition_2_3(obj_ids[i]):
-            label_show = label_show + '-NG '
+        abnormal_1 = condition_1(obj_ids[i], normal_paths)
+        abnormal_2 = condition_2(obj_ids[i])
+        abnormal_3 = condition_3(obj_ids[i])
+        if abnormal_1:
             color = (0, 0, 255)
+            label_show = label_show + '-dist'
+        if abnormal_2:
+            color = (0, 0, 255)
+            label_show = label_show + '-v'
+        if abnormal_3:
+            color = (0, 0, 255)
+            label_show = label_show + '-mv'
         cv2.rectangle(image, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
         t_size = cv2.getTextSize(label_show, 0, fontScale=tl / 3, thickness=tf)[0]
         c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
@@ -126,7 +138,7 @@ def cut_bbox_container(bbox_container):
 
 
 def main():
-    video_name = 'walker_detection.mp4'
+    video_name = 'video.avi'
     cap = cv2.VideoCapture(f'data/videos/{video_name}')
     fource = cv2.VideoWriter_fourcc(*'mp4v')
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -178,20 +190,7 @@ def main():
             for (x1, y1, x2, y2, label, track_id) in outputs:
                 bbox_draw.append({'class': label, 'box': [x1, y1, x2, y2]})
                 obj_ids.append(track_id)
-                # 正常路径
-                # if track_id == 11:
-                #     if not path_normal_walker:
-                #         path_normal_walker.append((0.5 * (x1 + x2), 0.5 * (y1 + y2)))
-                #     else:
-                #         if 0.5 * (y1 + y2) < path_normal_walker[-1][1]:
-                #             path_normal_walker.append((0.5 * (x1 + x2), 0.5 * (y1 + y2)))
-                # if track_id == 51:
-                #     if not path_normal_walker_2:
-                #         path_normal_walker_2.append((0.5 * (x1 + x2), 0.5 * (y1 + y2)))
-                #     else:
-                #         if 0.5 * (y1 + y2) < path_normal_walker_2[-1][1]:
-                #             path_normal_walker_2.append((0.5 * (x1 + x2), 0.5 * (y1 + y2)))
-                # 其它路径
+                # 所有路径
                 while track_id > len(path_walkers):
                     path_walkers.append([])
                     current_vs.append([])
@@ -229,8 +228,8 @@ def main():
         cv2.polylines(empty_image, [pts], False, (0, 255, 0), 3)
         cv2.imwrite(f'track_id/{i + 1}.jpg', empty_image)
 
-    # dict_path = {'path_01': path_normal_walker, 'path_02': path_normal_walker_2}
-    # 写入 JSON 数据
+    # dict_path = {'path_01': path_walkers[4], 'path_02': path_walkers[12], 'path_03': path_walkers[19], 'path_04': path_walkers[41]}
+    # # 写入 JSON 数据
     # with open('normal_path.json', 'w') as f:
     #     json.dump(dict_path, f)
 
