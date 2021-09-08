@@ -17,7 +17,6 @@ from models.experimental import attempt_load
 from utils.datasets import letterbox
 from utils.general import check_img_size, non_max_suppression, scale_coords
 from utils.plots import colors, plot_one_box
-from PIL import Image, ImageGrab
 
 
 class YOLOv5Detector:
@@ -89,7 +88,7 @@ class YOLOv5Detector:
 
 
 def detect_demo():
-    image_name = 'viya.jpg'
+    image_name = 'game_2.jpg'
     image_path = f'data/images/{image_name}'
     image_save_path = f'runs/detect/exp/{image_name}'
     video_name = 'run.mp4'
@@ -105,7 +104,7 @@ def detect_demo():
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         vid_writer = cv2.VideoWriter(video_save_path, fource, 30, (width, height))
     """ 图像检测器 """
-    yolov5_detector = YOLOv5Detector(weights='weights/best.pt', conf_thres=0.05)
+    yolov5_detector = YOLOv5Detector(weights='weights/yolov5s.pt', conf_thres=0.25)
     window_name = 'YOLOv5 detector'
     while True:
         state, frame = cap.read()

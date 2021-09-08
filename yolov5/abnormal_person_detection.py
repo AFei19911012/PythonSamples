@@ -29,6 +29,7 @@ threshold_v = [2, 20]
 threshold_v_mean = [2, 20]
 current_vs = []
 path_walkers = []
+abnormal_txt = []
 
 
 def cal_distance(track_id, normal_paths):
@@ -93,15 +94,24 @@ def draw_image(image, bbox_container, obj_ids, normal_paths):
         abnormal_1 = condition_1(obj_ids[i], normal_paths)
         abnormal_2 = condition_2(obj_ids[i])
         abnormal_3 = condition_3(obj_ids[i])
+        is_abnormal = False
         if abnormal_1:
             color = (0, 0, 255)
             label_show = label_show + '-dist'
+            is_abnormal = True
         if abnormal_2:
             color = (0, 0, 255)
             label_show = label_show + '-v'
+            is_abnormal = True
         if abnormal_3:
             color = (0, 0, 255)
             label_show = label_show + '-mv'
+            is_abnormal = True
+
+        if is_abnormal:
+            with open('abnormal_txt.txt', 'a') as fid:
+                fid.write(f'{label_show}\n')
+
         cv2.rectangle(image, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
         t_size = cv2.getTextSize(label_show, 0, fontScale=tl / 3, thickness=tf)[0]
         c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
@@ -145,7 +155,7 @@ def main():
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     vid_writer = cv2.VideoWriter(f'runs/track/{video_name}.mp4', fource, 30, (width, height))
     """ yolov5 目标检测器 """
-    yolov5_detector = YOLOv5Detector()
+    yolov5_detector = YOLOv5Detector(conf_thres=0.5)
     """ deepsort 追踪器 """
     cfg = get_config()
     cfg.merge_from_file("deep_sort/configs/deep_sort.yaml")
@@ -162,6 +172,9 @@ def main():
     # 读取正常路径
     with open('normal_path.json', 'r') as f:
         normal_paths = json.load(f)
+
+    if os.path.exists('abnormal_txt.txt'):
+        os.remove('abnormal_txt.txt')
 
     window_name = 'Abnormal walker detection'
     while True:
