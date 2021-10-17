@@ -148,7 +148,7 @@ def cut_bbox_container(bbox_container):
 
 
 def main():
-    video_name = 'video.avi'
+    video_name = 'walker_detection.mp4'
     cap = cv2.VideoCapture(f'data/videos/{video_name}')
     fource = cv2.VideoWriter_fourcc(*'mp4v')
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -159,6 +159,7 @@ def main():
     """ deepsort 追踪器 """
     cfg = get_config()
     cfg.merge_from_file("deep_sort/configs/deep_sort.yaml")
+
     deepsort = DeepSort(cfg.DEEPSORT.REID_CKPT,
                         max_dist=cfg.DEEPSORT.MAX_DIST,
                         min_confidence=cfg.DEEPSORT.MIN_CONFIDENCE,
@@ -196,7 +197,9 @@ def main():
         """ detections --> deepsort """
         xywhs = torch.Tensor(xywh_bboxs)
         confss = torch.Tensor(confs)
-        outputs = deepsort.update(xywhs, confss, labels, frame)
+
+        outputs, features = deepsort.update(xywhs, confss, labels, frame)
+
         obj_ids = []
         bbox_draw = []
         if len(outputs) > 0:
@@ -241,8 +244,8 @@ def main():
         cv2.polylines(empty_image, [pts], False, (0, 255, 0), 3)
         cv2.imwrite(f'track_id/{i + 1}.jpg', empty_image)
 
-    # dict_path = {'path_01': path_walkers[4], 'path_02': path_walkers[12], 'path_03': path_walkers[19], 'path_04': path_walkers[41]}
-    # # 写入 JSON 数据
+    # dict_path = {'path_01': path_walkers[17], 'path_02': path_walkers[26]}
+    # 写入 JSON 数据
     # with open('normal_path.json', 'w') as f:
     #     json.dump(dict_path, f)
 

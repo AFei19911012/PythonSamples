@@ -44,7 +44,7 @@ class DeepSort(object):
             box = track.to_tlwh()
             x1, y1, x2, y2 = self._tlwh_to_xyxy(box)
             outputs.append((x1, y1, x2, y2, track.cls_, track.track_id))
-        return outputs
+        return outputs, features
 
     @staticmethod
     def _xywh_to_tlwh(bbox_xywh):
