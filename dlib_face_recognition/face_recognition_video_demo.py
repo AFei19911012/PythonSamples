@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
  Created on 2021/5/20 9:19
- Filename   : demo_face_recognition_from_video_and_save.py
+ Filename   : face_recognition_video_demo.py
  Author     : Taosy.W
  Zhihu      : https://www.zhihu.com/people/1105936347
  Github     : https://github.com/AFei19911012

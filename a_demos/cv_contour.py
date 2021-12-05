@@ -16,7 +16,7 @@ import imutils
 import matplotlib.pyplot as plt
 
 # 读取图像
-image = cv.imread(r'..\images\dog.jpg')
+image = cv.imread(r'images/dog.jpg')
 # 比例
 orig = image.copy()
 plt.figure('opencv contour')

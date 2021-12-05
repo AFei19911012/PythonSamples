@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
  Created on 2021/6/29 22:38
- Filename   : ex_ocr_hand_written_digits.py
+ Filename   : cv_svm_ocr_hand_written_digits.py
  Author     : Taosy.W
  Zhihu      : https://www.zhihu.com/people/1105936347
  Github     : https://github.com/AFei19911012/PythonSamples
@@ -40,7 +40,7 @@ def hog(img):
 
 
 def main():
-    img = cv.imread('../data/digits.png', 0)
+    img = cv.imread('data/digits.png', 0)
     if img is None:
         raise Exception("we need the digits.png image from samples/data here !")
 

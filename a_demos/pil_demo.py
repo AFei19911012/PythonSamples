@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
  Created on 2021/5/24 18:03
- Filename   : ex_PIL.py
+ Filename   : pil_demo.py
  Author     : Taosy.W
  Zhihu      : https://www.zhihu.com/people/1105936347
  Github     : https://github.com/AFei19911012
@@ -14,12 +14,12 @@ from PIL import ImageFilter
 import numpy as np
 
 # open: 加载图片
-image = Image.open('../images/dog.jpg')
+image = Image.open('images/dog.jpg')
 # 用 Windows 自带的图片浏览器打开
 # image.show()
 
 # save: 保存图片
-image.save('../images/dog.png')
+image.save('images/dog.png')
 print(image.format)
 print(image.size)
 print(image.mode)
@@ -73,7 +73,7 @@ image_edge = image.filter(ImageFilter.FIND_EDGES)
 
 # blend: 融合，按照透明度
 # out = image1 * (1 - alpha) + image2 * alpha
-image_background = Image.open('../images/background.jpg')
+image_background = Image.open('images/background.jpg')
 image_blend = Image.blend(image, image_background, 0.2)
 # image_blend.show()
 
@@ -173,7 +173,7 @@ image.transpose(Image.ROTATE_180)       # 旋转 180 度
 image.transpose(Image.ROTATE_270)       # 旋转 270 度
 
 # seek: 查找指定帧
-image_gif = Image.open('../images/ball.gif')
+image_gif = Image.open('images/ball.gif')
 print(image_gif.mode)
 '''
 P

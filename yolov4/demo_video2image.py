@@ -16,9 +16,9 @@ import sys
 
 def main():
     # file path
-    video_name = 'helmet.mp4'
+    video_name = 'poker.mp4'
     video_path = 'videos/' + video_name
-    image_path = 'data/' + video_name[:-4] + '_' + time.strftime('%Y_%m_%d', time.localtime())
+    image_path = 'D:/MyPrograms/DataSet/poker'
     # generate a fold
     if not os.path.exists(image_path):
         os.makedirs(image_path)
@@ -31,12 +31,14 @@ def main():
 
     # frame --> image
     has_frame = True
-    idx = 0
+    idx = 7482
     while has_frame:
         has_frame, frame = cap.read()
-        if has_frame and idx % 5 == 1:
+        # if has_frame and idx % 5 == 1:
+        if has_frame:
             # file_name = f'{idx//5}'.zfill(6) + '.jpg'
-            file_name = f'{idx // 5:06d}.jpg'
+            # file_name = f'{idx // 5:06d}.jpg'
+            file_name = f'{idx:06d}.jpg'
             cv.imwrite(os.path.join(image_path, file_name), frame)
         idx += 1
     cap.release()

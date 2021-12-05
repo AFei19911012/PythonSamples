@@ -16,7 +16,7 @@ import imutils
 import matplotlib.pyplot as plt
 
 # 读取图像
-image = cv.imread(r'..\images\notecard.png')
+image = cv.imread(r'images/notecard.png')
 # 比例
 orig = image.copy()
 plt.figure('perspective transform')
@@ -37,7 +37,7 @@ plt.subplot(1, 3, 2)
 plt.imshow(imutils.opencv2matplotlib(canny_image))
 plt.axis('off')
 plt.title('Canny')
-cv.imwrite('../images/Canny.jpg', canny_image)
+cv.imwrite('images/Canny.jpg', canny_image)
 # 查找轮廓
 contours = cv.findContours(canny_image.copy(), cv.RETR_LIST, cv.CHAIN_APPROX_SIMPLE)
 # 保留最大轮廓
@@ -66,4 +66,4 @@ else:
     plt.axis('off')
     plt.title('Warped')
     plt.show()
-    cv.imwrite('../images/Warped.jpg', warped)
+    cv.imwrite('images/Warped.jpg', warped)

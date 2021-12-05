@@ -25,6 +25,7 @@ __pycache__/
 *.npz
 *.webm
 *.t7
+track_id/
 
 # C extensions
 *.so

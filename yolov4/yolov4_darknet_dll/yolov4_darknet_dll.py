@@ -100,7 +100,7 @@ if __name__ == '__main__':
     weights_path = '../weights/yolov4.weights'
     image_path = '../images/xiyou.jpg'
     video_path = '../videos/run.mp4'
-    video_save = '../videos/run.avi'
+    video_save = '../videos/run_.mp4'
     confidence_threshold = 0.5
     # Load dll (gpu or cpu)
     # win_lib = ctypes.windll.LoadLibrary('yolo_cpp_dll.dll')
@@ -111,12 +111,12 @@ if __name__ == '__main__':
     classes = get_classes(names_path)
     colors = get_colors(classes)
     winName = 'Deep learning object detection in YOLO'
-    image_path = ''
+    # image_path = ''
     if image_path:
         cap = cv.VideoCapture(image_path)
     else:
         cap = cv.VideoCapture(video_path)
-        vid_writer = cv.VideoWriter(video_save, cv.VideoWriter_fourcc('M', 'J', 'P', 'G'), 30,
+        vid_writer = cv.VideoWriter(video_save, cv.VideoWriter_fourcc(*'mp4v'), 30,
                                     (round(cap.get(cv.CAP_PROP_FRAME_WIDTH)),
                                      round(cap.get(cv.CAP_PROP_FRAME_HEIGHT))))
     state = True

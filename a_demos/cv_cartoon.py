@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
  Created on 2021/6/28 22:33
- Filename   : ex_cartoon.py
+ Filename   : cv_cartoon.py
  Author     : Taosy.W
  Zhihu      : https://www.zhihu.com/people/1105936347
  Github     : https://github.com/AFei19911012
@@ -13,7 +13,7 @@ import cv2
 
 
 def main():
-    image_path = '../images/obama.jpg'
+    image_path = 'images/obama.jpg'
     img_rgb = cv2.imread(image_path)
     height, width = img_rgb.shape[0:2]
     img_color = img_rgb.copy()

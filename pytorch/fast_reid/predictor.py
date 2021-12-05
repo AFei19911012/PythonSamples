@@ -24,7 +24,7 @@ def setup_cfg():
     cfg_ = get_cfg()
     cfg_.MODEL.DEVICE = ('cuda' if torch.cuda.is_available() else 'cpu')
     """ Torch not compiled with CUDA enabled """
-    # cfg_.MODEL.DEVICE = 'cuda'
+    cfg_.MODEL.DEVICE = 'cuda'
     """ car """
     cfg_.merge_from_file(abspath('configs/VehicleID/bagtricks_R50-ibn.yml'))
     cfg_.merge_from_list(['MODEL.WEIGHTS', abspath('models/vehicleid_bot_R50-ibn.pth')])

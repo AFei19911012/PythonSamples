@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
  Created on 2021/6/27 20:09
- Filename   : ex_example_gallery.py
+ Filename   : matplotlib_demos.py
  Author     : Taosy.W
  Zhihu      : https://www.zhihu.com/people/1105936347
  Github     : https://github.com/AFei19911012
@@ -205,12 +205,12 @@ def density_curves_with_histogram():
 
 
 if __name__ == '__main__':
-    line_plot()
-    multiyy_plot()
-    time_series_with_peaks()
-    scatter_plot()
-    marginal_histogram()
-    correllogram()
-    density_plot()
-    joy_plot()
+    # line_plot()
+    # multiyy_plot()
+    # time_series_with_peaks()
+    # scatter_plot()
+    # marginal_histogram()
+    # correllogram()
+    # density_plot()
+    # joy_plot()
     density_curves_with_histogram()

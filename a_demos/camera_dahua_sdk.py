@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
  Created on 2021/6/18 22:08
- Filename   : ex_camera_dahua_sdk.py
+ Filename   : camera_dahua_sdk.py
  Author     : Taosy.W
  Zhihu      : https://www.zhihu.com/people/1105936347
  Github     : https://github.com/AFei19911012
@@ -70,7 +70,7 @@ class DaHuaCarPlateApi:
         # 当报警类型是交通卡口事件时在界面上进行显示相关信息
         if dwAlarmType == EM_EVENT_IVS_TYPE.TRAFFICJUNCTION:
             global callback_num
-            local_path = os.path.abspath('.')
+            local_path = os.path.abspath('demo')
             is_global = False
             is_small = False
             show_info = TrafficCallBackAlarmInfo()

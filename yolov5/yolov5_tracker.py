@@ -69,7 +69,7 @@ def cut_bbox_container(bbox_container):
 
 def main():
     video_name = 'car.mp4'
-    # video_name = 'ADL-Rundle-6-raw.webm'
+    # video_name = 'car.mp4'
     cap = cv2.VideoCapture(f'data/videos/{video_name}')
     fource = cv2.VideoWriter_fourcc(*'mp4v')
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))

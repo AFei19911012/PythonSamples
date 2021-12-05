@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
  Created on 2021/6/18 22:20
- Filename   : ex_logging.py
+ Filename   : logging_demo.py
  Author     : Taosy.W
  Zhihu      : https://www.zhihu.com/people/1105936347
  Github     : https://github.com/AFei19911012
@@ -67,7 +67,7 @@ def init_logger(name: str, filename: Optional[bool] = None, mode: str = 'w', std
 
 
 def main():
-    logger = init_logger('MainTest', filename='logs_test.log')
+    logger = init_logger('MainTest', filename='data/logs_test.log')
     logger.info('init main ...')
     logger.error('error ...')
     logger.warning('warning ...')

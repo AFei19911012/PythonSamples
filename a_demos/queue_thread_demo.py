@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
  Created on 2021/4/17 11:36
- Filename: ex_queue_thread.py
+ Filename: queue_thread_demo.py
  Author  : Taosy
  Zhihu   : https://www.zhihu.com/people/1105936347
  Github  : https://github.com/AFei19911012
